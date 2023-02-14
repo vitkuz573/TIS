@@ -4,15 +4,15 @@ namespace WpfApp1;
 
 internal class Train
 {
-    public int Number { get; set; }
+    public int Number { get; }
 
-    public string Destination { get; set; }
+    public string Destination { get; }
 
-    public DateTimeOffset DepartureTime { get; set; }
+    public DateTimeOffset DepartureTime { get; }
 
-    public Train Left { get; set; }
+    public Train? Left { get; set; }
 
-    public Train Right { get; set; }
+    public Train? Right { get; set; }
 
     public int Height { get; set; }
 
