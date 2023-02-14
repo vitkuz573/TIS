@@ -150,16 +150,18 @@ public partial class MainWindow : Window
     {
         var id = Convert.ToInt32(numberToFindTextBox.Text);
 
-        var train = _tis.FindTrain(id);
+        var trainInformation = $"Поезд с номером {numberToFindTextBox.Text} не найден!";
+        var messageBoxCaption = "Ошибка";
+        var messageBoxImage = MessageBoxImage.Error;
 
-        string trainInformation = $"Поезд с номером {numberToFindTextBox.Text} не найден!";
-
-        if (train != null)
+        if (_tis.FindTrain(id, out var train))
         {
             trainInformation = $"Номер: {train.Number}\r\nСтанция назначения: {train.Destination}\r\nВремя прибытия: {train.DepartureTime}";
+            messageBoxCaption = "Результат";
+            messageBoxImage = MessageBoxImage.Information;
         }
 
-        MessageBox.Show(trainInformation);
+        MessageBox.Show(trainInformation, messageBoxCaption, MessageBoxButton.OK, messageBoxImage);
     }
 
     private void SearchByDestinationButton_Click(object sender, RoutedEventArgs e)

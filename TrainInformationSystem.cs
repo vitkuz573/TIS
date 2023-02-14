@@ -99,27 +99,27 @@ internal class TrainInformationSystem
 
     private static int GetBalance(Train node) => GetHeight(node?.Left) - GetHeight(node?.Right);
 
-    public Train? FindTrain(int number)
+    public bool FindTrain(int number, out Train? train)
     {
-        var current = Root;
+        train = Root;
 
-        while (current != null)
+        while (train != null)
         {
-            if (number < current.Number)
+            if (number < train.Number)
             {
-                current = current.Left;
+                train = train.Left;
             }
-            else if (number > current.Number)
+            else if (number > train.Number)
             {
-                current = current.Right;
+                train = train.Right;
             }
             else
             {
-                return current;
+                return true;
             }
         }
 
-        return null;
+        return false;
     }
 
     public IEnumerable<Train> FindTrainsByDestination(string destination)
