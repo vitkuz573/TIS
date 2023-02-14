@@ -17,16 +17,40 @@ public partial class MainWindow : Window
         InitializeComponent();
 
         _tis = new TrainInformationSystem();
-
-        var random = new Random();
         
+        var random = new Random();
+
         for (int i = 0; i < 20; i++)
         {
-            var number = random.Next(1, 100);
+            var number = random.Next(1, 150);
             var destination = "Destination " + i;
             var departureTime = DateTime.Now.AddHours(i);
             _tis.InsertTrain(number, destination, departureTime);
         }
+
+        // _tis.InsertTrain(10, "", DateTime.Now);
+        // _tis.InsertTrain(1, "", DateTime.Now);
+        // _tis.InsertTrain(6, "", DateTime.Now);
+        // _tis.InsertTrain(70, "", DateTime.Now);
+        // _tis.InsertTrain(40, "", DateTime.Now);
+        // _tis.InsertTrain(14, "", DateTime.Now);
+        // _tis.InsertTrain(12, "", DateTime.Now);
+        // _tis.InsertTrain(68, "", DateTime.Now);
+        // _tis.InsertTrain(6, "", DateTime.Now);
+        // _tis.InsertTrain(8, "", DateTime.Now);
+        // _tis.InsertTrain(9, "", DateTime.Now);
+        // _tis.InsertTrain(11, "", DateTime.Now);
+        // _tis.InsertTrain(57, "", DateTime.Now);
+        // _tis.InsertTrain(43, "", DateTime.Now);
+        // _tis.InsertTrain(44, "", DateTime.Now);
+        // _tis.InsertTrain(89, "", DateTime.Now);
+        // _tis.InsertTrain(32, "", DateTime.Now);
+        // _tis.InsertTrain(33, "", DateTime.Now);
+        // _tis.InsertTrain(101, "", DateTime.Now);
+        // _tis.InsertTrain(2, "", DateTime.Now);
+        // _tis.InsertTrain(59, "", DateTime.Now);
+        // _tis.InsertTrain(17, "", DateTime.Now);
+        // _tis.InsertTrain(63, "", DateTime.Now);
 
         visual = new DrawingVisual();
         dc = visual.RenderOpen();
@@ -57,34 +81,32 @@ public partial class MainWindow : Window
 
             if (train.Left != null)
             {
-                var gg = dx / 1.3;
-
-                if (gg < 20)
+                double leftDx = dx / 2.0;
+                int leftDy = dy;
+                if (train.Left.Height - (train.Right?.Height ?? 0) > 1)
                 {
-                    DrawTree(train.Left, x - dx / level, y + dy, level + 1, gg, dy);
-                    dc.DrawLine(new Pen(Brushes.Black, 2), new Point(x, y + 15), new Point(x - dx / level + 10 - 10, y + dy - 15));
+                    leftDx *= 0.8;
+                    leftDy = (int)(dy * 0.8);
                 }
-                else
-                {
-                    DrawTree(train.Left, x - dx / level, y + dy, level + 1, 120, dy);
-                    dc.DrawLine(new Pen(Brushes.Black, 2), new Point(x, y + 15), new Point(x - dx / level + 10 - 10, y + dy - 15));
-                }
+                double childX = x - leftDx;
+                int childY = y + leftDy;
+                DrawTree(train.Left, childX, childY, level + 1, leftDx, leftDy);
+                dc.DrawLine(new Pen(Brushes.Black, 2), new Point(x, y + 15), new Point(childX + 10, childY - 15));
             }
 
             if (train.Right != null)
             {
-                var gg = dx / 1.3;
-
-                if (gg < 20)
+                double rightDx = dx / 2.0;
+                int rightDy = dy;
+                if ((train.Right?.Height ?? 0) - train.Left?.Height > 1)
                 {
-                    DrawTree(train.Right, x + dx / level, y + dy, level + 1, gg, dy);
-                    dc.DrawLine(new Pen(Brushes.Black, 2), new Point(x, y + 15), new Point(x + dx / level - 10 + 10, y + dy - 15));
+                    rightDx *= 0.8;
+                    rightDy = (int)(dy * 0.8);
                 }
-                else
-                {
-                    DrawTree(train.Right, x + dx / level, y + dy, level + 1, 120, dy);
-                    dc.DrawLine(new Pen(Brushes.Black, 2), new Point(x, y + 15), new Point(x + dx / level - 10 + 10, y + dy - 15));
-                }
+                double childX = x + rightDx;
+                int childY = y + rightDy;
+                DrawTree(train.Right, childX, childY, level + 1, rightDx, rightDy);
+                dc.DrawLine(new Pen(Brushes.Black, 2), new Point(x, y + 15), new Point(childX - 10, childY - 15));
             }
         }
     }

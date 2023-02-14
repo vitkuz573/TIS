@@ -11,10 +11,13 @@ class Train
     public Train Left { get; set; }
     public Train Right { get; set; }
 
+    public int Height { get; set; }
+
     public Train(int number, string destination, DateTime departureTime)
     {
         Number = number;
         Destination = destination;
         DepartureTime = departureTime;
+        Height = 1;
     }
 }

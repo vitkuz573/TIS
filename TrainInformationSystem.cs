@@ -1,12 +1,10 @@
-﻿using System.Collections.Generic;
-using System;
+﻿using System;
 
 namespace WpfApp1;
 
 class TrainInformationSystem
 {
-    public Train Root { get; private set; }
-
+    public Train? Root { get; private set; }
     public int Count { get; private set; }
 
     public void InsertTrain(int number, string destination, DateTime departureTime)
@@ -15,59 +13,111 @@ class TrainInformationSystem
         {
             Root = new Train(number, destination, departureTime);
             Count = 1;
+
             return;
         }
 
-        var current = Root;
-
-        while (true)
-        {
-            if (number < current.Number)
-            {
-                if (current.Left == null)
-                {
-                    current.Left = new Train(number, destination, departureTime);
-                    Count++;
-                    break;
-                }
-
-                current = current.Left;
-            }
-            else
-            {
-                if (current.Right == null)
-                {
-                    current.Right = new Train(number, destination, departureTime);
-                    Count++;
-                    break;
-                }
-
-                current = current.Right;
-            }
-        }
+        Root = InsertTrain(Root, number, destination, departureTime);
+        Count++;
     }
 
-    public void PrintAllTrains()
+    private Train InsertTrain(Train node, int number, string destination, DateTime departureTime)
     {
-        if (Root != null)
+        if (node == null)
         {
-            InOrderTraverse(Root);
+            return new Train(number, destination, departureTime);
         }
+
+        if (number < node.Number)
+        {
+            node.Left = InsertTrain(node.Left, number, destination, departureTime);
+        }
+        else
+        {
+            node.Right = InsertTrain(node.Right, number, destination, departureTime);
+        }
+
+        node.Height = Math.Max(GetHeight(node.Left), GetHeight(node.Right)) + 1;
+        int balance = GetBalance(node);
+
+        // Left Left Case
+        if (balance > 1 && number < node.Left.Number)
+        {
+            return RotateRight(node);
+        }
+
+        // Right Right Case
+        if (balance < -1 && number > node.Right.Number)
+        {
+            return RotateLeft(node);
+        }
+
+        // Left Right Case
+        if (balance > 1 && number > node.Left.Number)
+        {
+            node.Left = RotateLeft(node.Left);
+            return RotateRight(node);
+        }
+
+        // Right Left Case
+        if (balance < -1 && number < node.Right.Number)
+        {
+            node.Right = RotateRight(node.Right);
+            return RotateLeft(node);
+        }
+
+        return node;
     }
 
-    private void InOrderTraverse(Train current)
+    private static Train RotateLeft(Train node)
     {
-        if (current == null)
-        {
-            return;
-        }
+        var newRoot = node.Right;
+        var newSubtree = newRoot.Left;
 
-        InOrderTraverse(current.Left);
-        Console.WriteLine("Train Number: " + current.Number + ", Destination: " + current.Destination + ", Departure Time: " + current.DepartureTime);
-        InOrderTraverse(current.Right);
+        newRoot.Left = node;
+        node.Right = newSubtree;
+
+        node.Height = Math.Max(GetHeight(node.Left), GetHeight(node.Right)) + 1;
+        newRoot.Height = Math.Max(GetHeight(newRoot.Left), GetHeight(newRoot.Right)) + 1;
+
+        return newRoot;
     }
 
-    public Train FindTrain(int number)
+    private static Train RotateRight(Train node)
+    {
+        var newRoot = node.Left;
+        var newSubtree = newRoot.Right;
+
+        newRoot.Right = node;
+        node.Left = newSubtree;
+
+        node.Height = Math.Max(GetHeight(node.Left), GetHeight(node.Right)) + 1;
+        newRoot.Height = Math.Max(GetHeight(newRoot.Left), GetHeight(newRoot.Right)) + 1;
+
+        return newRoot;
+    }
+
+    private static int GetHeight(Train node)
+    {
+        if (node == null)
+        {
+            return 0;
+        }
+
+        return node.Height;
+    }
+
+    private static int GetBalance(Train node)
+    {
+        if (node == null)
+        {
+            return 0;
+        }
+
+        return GetHeight(node.Left) - GetHeight(node.Right);
+    }
+
+    public Train? FindTrain(int number)
     {
         var current = Root;
 
@@ -88,58 +138,5 @@ class TrainInformationSystem
         }
 
         return null;
-    }
-
-    public List<Train> FindTrainsByDestination(string destination)
-    {
-        var trains = new List<Train>();
-
-        if (Root != null)
-        {
-            FindTrainsByDestination(Root, destination, trains);
-        }
-
-        return trains;
-    }
-
-    private void FindTrainsByDestination(Train current, string destination, List<Train> trains)
-    {
-        if (current == null)
-        {
-            return;
-        }
-
-        FindTrainsByDestination(current.Left, destination, trains);
-
-        if (current.Destination == destination)
-        {
-            trains.Add(current);
-        }
-
-        FindTrainsByDestination(current.Right, destination, trains);
-    }
-
-    public int[] GetAllTrainNumbers()
-    {
-        var numbers = new List<int>();
-
-        if (Root != null)
-        {
-            GetAllTrainNumbers(Root, numbers);
-        }
-
-        return numbers.ToArray();
-    }
-
-    private void GetAllTrainNumbers(Train current, List<int> numbers)
-    {
-        if (current == null)
-        {
-            return;
-        }
-
-        GetAllTrainNumbers(current.Left, numbers);
-        numbers.Add(current.Number);
-        GetAllTrainNumbers(current.Right, numbers);
     }
 }
