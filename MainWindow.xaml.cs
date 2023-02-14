@@ -3,20 +3,19 @@ using System.Globalization;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
-using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace WpfApp1;
 
 public partial class MainWindow : Window
 {
-    private TrainInformationSystem _tis;
-    private int _x, _y;
-    private DrawingVisual visual;
-    private DrawingContext dc;
+    private readonly TrainInformationSystem _tis;
+    private readonly DrawingVisual visual;
+    private readonly DrawingContext dc;
 
     public MainWindow()
     {
         InitializeComponent();
+
         _tis = new TrainInformationSystem();
 
         var random = new Random();
