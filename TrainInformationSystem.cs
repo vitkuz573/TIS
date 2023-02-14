@@ -138,35 +138,37 @@ internal class TrainInformationSystem
         return null;
     }
 
-    public List<Train> FindTrainsByDestination(string destination)
+    public IEnumerable<Train> FindTrainsByDestination(string destination)
     {
-        var result = new List<Train>();
-
-        FindTrainsByDestination(Root, destination, result);
-
-        return result;
+        return FindTrainsByDestination(Root, destination);
     }
 
-    private void FindTrainsByDestination(Train node, string destination, List<Train> result)
+    private IEnumerable<Train> FindTrainsByDestination(Train node, string destination)
     {
         if (node == null)
         {
-            return;
+            yield break;
         }
 
         if (string.Equals(node.Destination, destination, StringComparison.OrdinalIgnoreCase))
         {
-            result.Add(node);
+            yield return node;
         }
 
         if (node.Left != null && string.Compare(destination, node.Destination, StringComparison.OrdinalIgnoreCase) < 0)
         {
-            FindTrainsByDestination(node.Left, destination, result);
+            foreach (var train in FindTrainsByDestination(node.Left, destination))
+            {
+                yield return train;
+            }
         }
 
         if (node.Right != null && string.Compare(destination, node.Destination, StringComparison.OrdinalIgnoreCase) > 0)
         {
-            FindTrainsByDestination(node.Right, destination, result);
+            foreach (var train in FindTrainsByDestination(node.Right, destination))
+            {
+                yield return train;
+            }
         }
     }
 }
