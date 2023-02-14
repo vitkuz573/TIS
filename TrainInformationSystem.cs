@@ -56,6 +56,7 @@ class TrainInformationSystem
         if (balance > 1 && number > node.Left.Number)
         {
             node.Left = RotateLeft(node.Left);
+
             return RotateRight(node);
         }
 
@@ -63,6 +64,7 @@ class TrainInformationSystem
         if (balance < -1 && number < node.Right.Number)
         {
             node.Right = RotateRight(node.Right);
+
             return RotateLeft(node);
         }
 
