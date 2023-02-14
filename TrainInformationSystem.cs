@@ -7,12 +7,12 @@ internal class TrainInformationSystem
 {
     public Train? Root { get; private set; }
 
-    public void InsertTrain(int number, string destination, DateTime departureTime)
+    public void InsertTrain(int number, string destination, DateTimeOffset departureTime)
     {
         Root = InsertTrain(Root, number, destination, departureTime);
     }
 
-    private Train InsertTrain(Train node, int number, string destination, DateTime departureTime)
+    private Train InsertTrain(Train node, int number, string destination, DateTimeOffset departureTime)
     {
         if (node == null)
         {

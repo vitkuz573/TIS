@@ -124,7 +124,7 @@ public partial class MainWindow : Window
         var city = cityTextBox.Text;
         var departureDate = departureDatePicker.SelectedDate;
 
-        _tis.InsertTrain(Convert.ToInt32(number), city, (DateTime)departureDate);
+        _tis.InsertTrain(Convert.ToInt32(number), city, (DateTimeOffset)departureDate);
 
         ReDrawTree();
     }
