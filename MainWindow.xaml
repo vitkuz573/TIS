@@ -48,9 +48,9 @@
                     <RowDefinition Height="Auto" />
                 </Grid.RowDefinitions>
 
-                <TextBox x:Name="cityToFindTextBox" Grid.Row="0" Margin="10" />
+                <TextBox x:Name="destinationToFindTextBox" Grid.Row="0" Margin="10" />
 
-                <Button Content="Найти по станции назначения" Click="SearchByCityButton_Click" Grid.Row="1" Margin="10" />
+                <Button Content="Найти по станции назначения" Click="SearchByDestinationButton_Click" Grid.Row="1" Margin="10" />
             </Grid>
         </Grid>
 

@@ -139,11 +139,33 @@ public partial class MainWindow : Window
 
     private void SearchByIdentifierButton_Click(object sender, RoutedEventArgs e)
     {
+        var id = Convert.ToInt32(numberToFindTextBox.Text);
 
+        var train = _tis.FindTrain(id);
+
+        string trainInformation = $"Поезд с номером {numberToFindTextBox.Text} не найден!";
+
+        if (train != null)
+        {
+            trainInformation = $"Номер: {train.Number}\r\nСтанция назначения: {train.Destination}\r\nВремя прибытия: {train.DepartureTime}";
+        }
+
+        MessageBox.Show(trainInformation);
     }
 
-    private void SearchByCityButton_Click(object sender, RoutedEventArgs e)
+    private void SearchByDestinationButton_Click(object sender, RoutedEventArgs e)
     {
+        var destination = destinationToFindTextBox.Text;
 
+        var trains = _tis.FindTrainsByDestination(destination);
+
+        string trainsInformation = "";
+
+        foreach (var train in trains)
+        {
+            trainsInformation += $"Номер: {train.Number}\r\nСтанция назначения: {train.Destination}\r\nВремя прибытия: {train.DepartureTime}\r\n";
+        }
+
+        MessageBox.Show(trainsInformation);
     }
 }
