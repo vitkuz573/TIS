@@ -140,34 +140,31 @@ internal class TrainInformationSystem
 
     public IEnumerable<Train> FindTrainsByDestination(string destination)
     {
-        return FindTrainsByDestination(Root, destination);
-    }
+        var stack = new Stack<Train>();
+        stack.Push(Root);
 
-    private IEnumerable<Train> FindTrainsByDestination(Train node, string destination)
-    {
-        if (node == null)
+        while (stack.Count > 0)
         {
-            yield break;
-        }
+            var node = stack.Pop();
 
-        if (string.Equals(node.Destination, destination, StringComparison.OrdinalIgnoreCase))
-        {
-            yield return node;
-        }
-
-        if (node.Left != null && string.Compare(destination, node.Destination, StringComparison.OrdinalIgnoreCase) < 0)
-        {
-            foreach (var train in FindTrainsByDestination(node.Left, destination))
+            if (node == null)
             {
-                yield return train;
+                continue;
             }
-        }
 
-        if (node.Right != null && string.Compare(destination, node.Destination, StringComparison.OrdinalIgnoreCase) > 0)
-        {
-            foreach (var train in FindTrainsByDestination(node.Right, destination))
+            if (string.Equals(node.Destination, destination, StringComparison.OrdinalIgnoreCase))
             {
-                yield return train;
+                yield return node;
+            }
+
+            if (node.Left != null && string.Compare(destination, node.Destination, StringComparison.OrdinalIgnoreCase) < 0)
+            {
+                stack.Push(node.Left);
+            }
+
+            if (node.Right != null && string.Compare(destination, node.Destination, StringComparison.OrdinalIgnoreCase) > 0)
+            {
+                stack.Push(node.Right);
             }
         }
     }
