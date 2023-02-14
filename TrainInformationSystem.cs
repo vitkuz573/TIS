@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace WpfApp1;
 
@@ -140,5 +141,37 @@ class TrainInformationSystem
         }
 
         return null;
+    }
+
+    public List<Train> FindTrainsByDestination(string destination)
+    {
+        var result = new List<Train>();
+
+        FindTrainsByDestination(Root, destination, result);
+
+        return result;
+    }
+
+    private void FindTrainsByDestination(Train node, string destination, List<Train> result)
+    {
+        if (node == null)
+        {
+            return;
+        }
+
+        if (node.Destination == destination)
+        {
+            result.Add(node);
+        }
+
+        if (node.Left != null && string.Compare(destination, node.Destination) < 0)
+        {
+            FindTrainsByDestination(node.Left, destination, result);
+        }
+
+        if (node.Right != null && string.Compare(destination, node.Destination) > 0)
+        {
+            FindTrainsByDestination(node.Right, destination, result);
+        }
     }
 }

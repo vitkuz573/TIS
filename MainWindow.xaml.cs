@@ -136,4 +136,14 @@ public partial class MainWindow : Window
         _visual = DrawTrainInformation();
         AddVisualToCanvas(_visual);
     }
+
+    private void SearchByIdentifierButton_Click(object sender, RoutedEventArgs e)
+    {
+
+    }
+
+    private void SearchByCityButton_Click(object sender, RoutedEventArgs e)
+    {
+
+    }
 }
