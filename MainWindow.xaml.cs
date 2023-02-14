@@ -58,30 +58,32 @@ public partial class MainWindow : Window
             if (train.Left != null)
             {
                 var gg = dx / 1.3;
+
                 if (gg < 20)
                 {
                     DrawTree(train.Left, x - dx / level, y + dy, level + 1, gg, dy);
-                    dc.DrawLine(new Pen(Brushes.Black, 2), new Point(x, y + 15), new Point((x - dx / level + 10) - 10, y + dy - 15));
+                    dc.DrawLine(new Pen(Brushes.Black, 2), new Point(x, y + 15), new Point(x - dx / level + 10 - 10, y + dy - 15));
                 }
                 else
                 {
                     DrawTree(train.Left, x - dx / level, y + dy, level + 1, 120, dy);
-                    dc.DrawLine(new Pen(Brushes.Black, 2), new Point(x, y + 15), new Point((x - dx / level + 10) - 10, y + dy - 15));
+                    dc.DrawLine(new Pen(Brushes.Black, 2), new Point(x, y + 15), new Point(x - dx / level + 10 - 10, y + dy - 15));
                 }
             }
 
             if (train.Right != null)
             {
                 var gg = dx / 1.3;
+
                 if (gg < 20)
                 {
                     DrawTree(train.Right, x + dx / level, y + dy, level + 1, gg, dy);
-                    dc.DrawLine(new Pen(Brushes.Black, 2), new Point(x, y + 15), new Point((x + dx / level - 10) + 10, y + dy - 15));
+                    dc.DrawLine(new Pen(Brushes.Black, 2), new Point(x, y + 15), new Point(x + dx / level - 10 + 10, y + dy - 15));
                 }
                 else
                 {
                     DrawTree(train.Right, x + dx / level, y + dy, level + 1, 120, dy);
-                    dc.DrawLine(new Pen(Brushes.Black, 2), new Point(x, y + 15), new Point((x + dx / level - 10) + 10, y + dy - 15));
+                    dc.DrawLine(new Pen(Brushes.Black, 2), new Point(x, y + 15), new Point(x + dx / level - 10 + 10, y + dy - 15));
                 }
             }
         }
