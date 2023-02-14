@@ -61,7 +61,11 @@ public partial class MainWindow : Window
 
     private void AddVisualToCanvas(DrawingVisual visual)
     {
-        var img = new Image { Source = new DrawingImage(visual.Drawing) };
+        var img = new Image
+        {
+            Source = new DrawingImage(visual.Drawing)
+        };
+
         canvas.Children.Add(img);
     }
 
