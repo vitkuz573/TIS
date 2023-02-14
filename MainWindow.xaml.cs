@@ -37,7 +37,6 @@ public partial class MainWindow : Window
             _tis.InsertTrain(number, destination, departureTime);
         }
 
-
         visual = new DrawingVisual();
         dc = visual.RenderOpen();
 
