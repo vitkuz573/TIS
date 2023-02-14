@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Globalization;
 using System.Windows;
 using System.Windows.Controls;
@@ -10,47 +9,24 @@ namespace WpfApp1;
 public partial class MainWindow : Window
 {
     private readonly TrainInformationSystem _tis;
-    private readonly DrawingVisual _visual;
+    private DrawingVisual? _visual;
 
     public MainWindow()
     {
         InitializeComponent();
 
         _tis = new TrainInformationSystem();
-        InsertTrainInformation();
-        _visual = DrawTrainInformation();
-        AddVisualToCanvas(_visual);
-    }
-
-    private void InsertTrainInformation()
-    {
-        var random = new Random();
-        var usedNumbers = new HashSet<int>();
-
-        for (int i = 0; i < 20; i++)
-        {
-            int number;
-            do
-            {
-                number = random.Next(1, 99);
-            } while (usedNumbers.Contains(number));
-
-            usedNumbers.Add(number);
-
-            var destination = "Destination " + i;
-            var departureTime = DateTime.Now.AddHours(i);
-            _tis.InsertTrain(number, destination, departureTime);
-        }
     }
 
     private DrawingVisual DrawTrainInformation()
     {
         var visual = new DrawingVisual();
+
         using (var dc = visual.RenderOpen())
         {
-            // Draw train information using dc
             DrawTree(dc);
         }
+
         return visual;
     }
 
@@ -113,5 +89,24 @@ public partial class MainWindow : Window
         var dpi = VisualTreeHelper.GetDpi(this).PixelsPerDip;
         var formattedText = new FormattedText(train.Number.ToString(), CultureInfo.CurrentCulture, FlowDirection.LeftToRight, new Typeface("Arial"), 14, Brushes.Black, dpi);
         dc.DrawText(formattedText, new Point(x - 7, y - 7));
+    }
+
+    private void AddTrainButton_Click(object sender, RoutedEventArgs e)
+    {
+        var number = numberTextBox.Text;
+        var city = cityTextBox.Text;
+        var departureDate = departureDatePicker.SelectedDate;
+
+        _tis.InsertTrain(Convert.ToInt32(number), city, (DateTime)departureDate);
+
+        ReDrawTree();
+    }
+
+    private void ReDrawTree()
+    {
+        canvas.Children.Clear();
+
+        _visual = DrawTrainInformation();
+        AddVisualToCanvas(_visual);
     }
 }
