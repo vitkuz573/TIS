@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Globalization;
+using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -179,14 +180,25 @@ public partial class MainWindow : Window
 
         var trains = _tis.FindTrainsByDestination(destination);
 
-        string trainsInformation = "";
+        var trainsInformation = string.Empty;
+        var messageBoxCaption = "Ошибка";
+        var messageBoxImage = MessageBoxImage.Error;
 
-        foreach (var train in trains)
+        if (trains.Any())
         {
-            trainsInformation += $"Номер: {train.Number}\r\nСтанция назначения: {train.Destination}\r\nВремя прибытия: {train.DepartureTime}\r\n";
+            foreach (var train in trains)
+            {
+                trainsInformation += $"Номер: {train.Number}\r\nСтанция назначения: {train.Destination}\r\nВремя прибытия: {train.DepartureTime}\r\n\r\n";
+                messageBoxCaption = "Результат";
+                messageBoxImage = MessageBoxImage.Information;
+            }
+        }
+        else
+        {
+            trainsInformation = $"Поезда со станцией назначения '{destination}' не найдены!";
         }
 
-        MessageBox.Show(trainsInformation);
+        MessageBox.Show(trainsInformation, messageBoxCaption, MessageBoxButton.OK, messageBoxImage);
     }
 
     private void TextBox_PreviewTextInput(object sender, TextCompositionEventArgs e)

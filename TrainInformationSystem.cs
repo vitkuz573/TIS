@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace WpfApp1;
 
@@ -124,32 +125,37 @@ internal class TrainInformationSystem
 
     public IEnumerable<Train> FindTrainsByDestination(string destination)
     {
-        var stack = new Stack<Train>();
-        stack.Push(Root);
-
-        while (stack.Count > 0)
+        if (Root == null)
         {
-            var node = stack.Pop();
+            yield break;
+        }
 
-            if (node == null)
-            {
-                continue;
-            }
+        foreach (var train in FindTrainsByDestination(Root, destination))
+        {
+            yield return train;
+        }
+    }
 
-            if (string.Equals(node.Destination, destination, StringComparison.OrdinalIgnoreCase))
-            {
-                yield return node;
-            }
+    private static IEnumerable<Train> FindTrainsByDestination(Train node, string destination)
+    {
+        if (node == null)
+        {
+            yield break;
+        }
 
-            if (node.Left != null && string.Compare(destination, node.Destination, StringComparison.OrdinalIgnoreCase) < 0)
-            {
-                stack.Push(node.Left);
-            }
+        foreach (var train in FindTrainsByDestination(node.Left, destination))
+        {
+            yield return train;
+        }
 
-            if (node.Right != null && string.Compare(destination, node.Destination, StringComparison.OrdinalIgnoreCase) > 0)
-            {
-                stack.Push(node.Right);
-            }
+        if (string.Equals(node.Destination, destination, StringComparison.OrdinalIgnoreCase))
+        {
+            yield return node;
+        }
+
+        foreach (var train in FindTrainsByDestination(node.Right, destination))
+        {
+            yield return train;
         }
     }
 }
