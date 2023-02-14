@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Globalization;
 using System.Windows;
 using System.Windows.Controls;
@@ -9,13 +10,39 @@ namespace WpfApp1;
 public partial class MainWindow : Window
 {
     private readonly TrainInformationSystem _tis;
-    private DrawingVisual? _visual;
+    private DrawingVisual _visual;
 
     public MainWindow()
     {
         InitializeComponent();
 
         _tis = new TrainInformationSystem();
+        
+        InsertTrainInformation();
+
+        ReDrawTree();
+    }
+
+    private void InsertTrainInformation()
+    {
+        var random = new Random();
+        var usedNumbers = new HashSet<int>();
+
+        for (int i = 0; i < 20; i++)
+        {
+            int number;
+
+            do
+            {
+                number = random.Next(1, 99);
+            } while (usedNumbers.Contains(number));
+
+            usedNumbers.Add(number);
+
+            var destination = "Destination " + i;
+            var departureTime = DateTime.Now.AddHours(i);
+            _tis.InsertTrain(number, destination, departureTime);
+        }
     }
 
     private DrawingVisual DrawTrainInformation()
@@ -32,11 +59,7 @@ public partial class MainWindow : Window
 
     private void AddVisualToCanvas(DrawingVisual visual)
     {
-        var img = new Image
-        {
-            Source = new DrawingImage(visual.Drawing)
-        };
-
+        var img = new Image { Source = new DrawingImage(visual.Drawing) };
         canvas.Children.Add(img);
     }
 
