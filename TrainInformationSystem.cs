@@ -75,8 +75,8 @@ internal class TrainInformationSystem
         newRoot.Left = node;
         node.Right = newSubtree;
 
-        node.Height = Math.Max(GetHeight(node.Left), GetHeight(node.Right)) + 1;
-        newRoot.Height = Math.Max(GetHeight(newRoot.Left), GetHeight(newRoot.Right)) + 1;
+        node.Height = Math.Max(node.Left?.Height ?? 0, node.Right?.Height ?? 0) + 1;
+        newRoot.Height = Math.Max(newRoot.Left?.Height ?? 0, newRoot.Right?.Height ?? 0) + 1;
 
         return newRoot;
     }
@@ -89,31 +89,15 @@ internal class TrainInformationSystem
         newRoot.Right = node;
         node.Left = newSubtree;
 
-        node.Height = Math.Max(GetHeight(node.Left), GetHeight(node.Right)) + 1;
-        newRoot.Height = Math.Max(GetHeight(newRoot.Left), GetHeight(newRoot.Right)) + 1;
+        node.Height = Math.Max(node.Left?.Height ?? 0, node.Right?.Height ?? 0) + 1;
+        newRoot.Height = Math.Max(newRoot.Left?.Height ?? 0, newRoot.Right?.Height ?? 0) + 1;
 
         return newRoot;
     }
 
-    private static int GetHeight(Train node)
-    {
-        if (node == null)
-        {
-            return 0;
-        }
+    private static int GetHeight(Train node) => node?.Height ?? 0;
 
-        return node.Height;
-    }
-
-    private static int GetBalance(Train node)
-    {
-        if (node == null)
-        {
-            return 0;
-        }
-
-        return GetHeight(node.Left) - GetHeight(node.Right);
-    }
+    private static int GetBalance(Train node) => GetHeight(node?.Left) - GetHeight(node?.Right);
 
     public Train? FindTrain(int number)
     {

@@ -124,9 +124,18 @@ public partial class MainWindow : Window
         var city = cityTextBox.Text;
         var departureDate = departureDatePicker.SelectedDate;
 
-        _tis.InsertTrain(Convert.ToInt32(number), city, (DateTimeOffset)departureDate);
-
-        ReDrawTree();
+        try
+        {
+            _tis.InsertTrain(Convert.ToInt32(number), city, (DateTimeOffset)departureDate);
+        }
+        catch (ArgumentException)
+        {
+            MessageBox.Show($"Поезд с номером {number} уже существует в системе!", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
+        }
+        finally
+        {
+            ReDrawTree();
+        }
     }
 
     private void ReDrawTree()
