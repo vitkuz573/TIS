@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Globalization;
 using System.Windows;
 using System.Windows.Controls;
@@ -17,16 +18,25 @@ public partial class MainWindow : Window
         InitializeComponent();
 
         _tis = new TrainInformationSystem();
-        
+
         var random = new Random();
+        var usedNumbers = new HashSet<int>();
 
         for (int i = 0; i < 20; i++)
         {
-            var number = random.Next(1, 150);
+            int number;
+            do
+            {
+                number = random.Next(1, 99);
+            } while (usedNumbers.Contains(number));
+
+            usedNumbers.Add(number);
+
             var destination = "Destination " + i;
             var departureTime = DateTime.Now.AddHours(i);
             _tis.InsertTrain(number, destination, departureTime);
         }
+
 
         visual = new DrawingVisual();
         dc = visual.RenderOpen();
@@ -49,41 +59,52 @@ public partial class MainWindow : Window
 
         if (train != null)
         {
-            dc.DrawEllipse(Brushes.Red, null, new Point(x, y), 15, 15);
-
-            var dpi = VisualTreeHelper.GetDpi(this).PixelsPerDip;
-            var formattedText = new FormattedText(train.Number.ToString(), CultureInfo.CurrentCulture, FlowDirection.LeftToRight, new Typeface("Arial"), 14, Brushes.Black, dpi);
-            dc.DrawText(formattedText, new Point(x - 7, y - 7));
+            DrawNode(train, x, y);
 
             if (train.Left != null)
             {
-                double leftDx = dx / 2.0;
-                int leftDy = dy;
+                var leftDx = dx / 2.0;
+                var leftDy = dy;
+
                 if (train.Left.Height - (train.Right?.Height ?? 0) > 1)
                 {
                     leftDx *= 0.8;
                     leftDy = (int)(dy * 0.8);
                 }
-                double childX = x - leftDx;
-                int childY = y + leftDy;
+
+                var childX = x - leftDx;
+                var childY = y + leftDy;
+
                 DrawTree(train.Left, childX, childY, level + 1, leftDx, leftDy);
                 dc.DrawLine(new Pen(Brushes.Black, 2), new Point(x, y + 15), new Point(childX + 10, childY - 15));
             }
 
             if (train.Right != null)
             {
-                double rightDx = dx / 2.0;
-                int rightDy = dy;
+                var rightDx = dx / 2.0;
+                var rightDy = dy;
+
                 if ((train.Right?.Height ?? 0) - train.Left?.Height > 1)
                 {
                     rightDx *= 0.8;
                     rightDy = (int)(dy * 0.8);
                 }
-                double childX = x + rightDx;
-                int childY = y + rightDy;
+
+                var childX = x + rightDx;
+                var childY = y + rightDy;
+
                 DrawTree(train.Right, childX, childY, level + 1, rightDx, rightDy);
                 dc.DrawLine(new Pen(Brushes.Black, 2), new Point(x, y + 15), new Point(childX - 10, childY - 15));
             }
         }
+    }
+
+    private void DrawNode(Train train, double x, int y)
+    {
+        dc.DrawEllipse(Brushes.Red, null, new Point(x, y), 15, 15);
+
+        var dpi = VisualTreeHelper.GetDpi(this).PixelsPerDip;
+        var formattedText = new FormattedText(train.Number.ToString(), CultureInfo.CurrentCulture, FlowDirection.LeftToRight, new Typeface("Arial"), 14, Brushes.Black, dpi);
+        dc.DrawText(formattedText, new Point(x - 7, y - 7));
     }
 }
