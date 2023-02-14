@@ -28,30 +28,6 @@ public partial class MainWindow : Window
             _tis.InsertTrain(number, destination, departureTime);
         }
 
-        // _tis.InsertTrain(10, "", DateTime.Now);
-        // _tis.InsertTrain(1, "", DateTime.Now);
-        // _tis.InsertTrain(6, "", DateTime.Now);
-        // _tis.InsertTrain(70, "", DateTime.Now);
-        // _tis.InsertTrain(40, "", DateTime.Now);
-        // _tis.InsertTrain(14, "", DateTime.Now);
-        // _tis.InsertTrain(12, "", DateTime.Now);
-        // _tis.InsertTrain(68, "", DateTime.Now);
-        // _tis.InsertTrain(6, "", DateTime.Now);
-        // _tis.InsertTrain(8, "", DateTime.Now);
-        // _tis.InsertTrain(9, "", DateTime.Now);
-        // _tis.InsertTrain(11, "", DateTime.Now);
-        // _tis.InsertTrain(57, "", DateTime.Now);
-        // _tis.InsertTrain(43, "", DateTime.Now);
-        // _tis.InsertTrain(44, "", DateTime.Now);
-        // _tis.InsertTrain(89, "", DateTime.Now);
-        // _tis.InsertTrain(32, "", DateTime.Now);
-        // _tis.InsertTrain(33, "", DateTime.Now);
-        // _tis.InsertTrain(101, "", DateTime.Now);
-        // _tis.InsertTrain(2, "", DateTime.Now);
-        // _tis.InsertTrain(59, "", DateTime.Now);
-        // _tis.InsertTrain(17, "", DateTime.Now);
-        // _tis.InsertTrain(63, "", DateTime.Now);
-
         visual = new DrawingVisual();
         dc = visual.RenderOpen();
 
