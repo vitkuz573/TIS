@@ -10,15 +10,20 @@ namespace WpfApp1;
 public partial class MainWindow : Window
 {
     private readonly TrainInformationSystem _tis;
-    private readonly DrawingVisual visual;
-    private readonly DrawingContext dc;
+    private readonly DrawingVisual _visual;
 
     public MainWindow()
     {
         InitializeComponent();
 
         _tis = new TrainInformationSystem();
+        InsertTrainInformation();
+        _visual = DrawTrainInformation();
+        AddVisualToCanvas(_visual);
+    }
 
+    private void InsertTrainInformation()
+    {
         var random = new Random();
         var usedNumbers = new HashSet<int>();
 
@@ -36,29 +41,32 @@ public partial class MainWindow : Window
             var departureTime = DateTime.Now.AddHours(i);
             _tis.InsertTrain(number, destination, departureTime);
         }
+    }
 
-        visual = new DrawingVisual();
-        dc = visual.RenderOpen();
-
-        DrawTree();
-
-        dc.Close();
-
-        var img = new Image
+    private DrawingVisual DrawTrainInformation()
+    {
+        var visual = new DrawingVisual();
+        using (var dc = visual.RenderOpen())
         {
-            Source = new DrawingImage(visual.Drawing)
-        };
+            // Draw train information using dc
+            DrawTree(dc);
+        }
+        return visual;
+    }
 
+    private void AddVisualToCanvas(DrawingVisual visual)
+    {
+        var img = new Image { Source = new DrawingImage(visual.Drawing) };
         canvas.Children.Add(img);
     }
 
-    private void DrawTree(Train train = null, double x = 500, int y = 30, int level = 1, double dx = 300, int dy = 100)
+    private void DrawTree(DrawingContext dc, Train train = null, double x = 500, int y = 30, int level = 1, double dx = 300, int dy = 100)
     {
         train ??= _tis.Root;
 
         if (train != null)
         {
-            DrawNode(train, x, y);
+            DrawNode(dc, train, x, y);
 
             if (train.Left != null)
             {
@@ -74,7 +82,7 @@ public partial class MainWindow : Window
                 var childX = x - leftDx;
                 var childY = y + leftDy;
 
-                DrawTree(train.Left, childX, childY, level + 1, leftDx, leftDy);
+                DrawTree(dc, train.Left, childX, childY, level + 1, leftDx, leftDy);
                 dc.DrawLine(new Pen(Brushes.Black, 2), new Point(x, y + 15), new Point(childX + 10, childY - 15));
             }
 
@@ -92,13 +100,13 @@ public partial class MainWindow : Window
                 var childX = x + rightDx;
                 var childY = y + rightDy;
 
-                DrawTree(train.Right, childX, childY, level + 1, rightDx, rightDy);
+                DrawTree(dc, train.Right, childX, childY, level + 1, rightDx, rightDy);
                 dc.DrawLine(new Pen(Brushes.Black, 2), new Point(x, y + 15), new Point(childX - 10, childY - 15));
             }
         }
     }
 
-    private void DrawNode(Train train, double x, int y)
+    private void DrawNode(DrawingContext dc, Train train, double x, int y)
     {
         dc.DrawEllipse(Brushes.Red, null, new Point(x, y), 15, 15);
 
