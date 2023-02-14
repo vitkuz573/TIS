@@ -5,13 +5,16 @@ namespace WpfApp1;
 
 class TrainInformationSystem
 {
-    public Train? Root { get; private set; }
+    public Train Root { get; private set; }
+
+    public int Count { get; private set; }
 
     public void InsertTrain(int number, string destination, DateTime departureTime)
     {
         if (Root == null)
         {
             Root = new Train(number, destination, departureTime);
+            Count = 1;
             return;
         }
 
@@ -24,6 +27,7 @@ class TrainInformationSystem
                 if (current.Left == null)
                 {
                     current.Left = new Train(number, destination, departureTime);
+                    Count++;
                     break;
                 }
 
@@ -34,6 +38,7 @@ class TrainInformationSystem
                 if (current.Right == null)
                 {
                     current.Right = new Train(number, destination, departureTime);
+                    Count++;
                     break;
                 }
 
@@ -62,7 +67,7 @@ class TrainInformationSystem
         InOrderTraverse(current.Right);
     }
 
-    public Train? FindTrain(int number)
+    public Train FindTrain(int number)
     {
         var current = Root;
 
@@ -88,7 +93,7 @@ class TrainInformationSystem
     public List<Train> FindTrainsByDestination(string destination)
     {
         var trains = new List<Train>();
-        
+
         if (Root != null)
         {
             FindTrainsByDestination(Root, destination, trains);
