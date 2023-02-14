@@ -19,6 +19,11 @@ internal class TrainInformationSystem
             return new Train(number, destination, departureTime);
         }
 
+        if (number == node.Number)
+        {
+            throw new ArgumentException($"Train number {number} already exists in the system.");
+        }
+
         if (number < node.Number)
         {
             node.Left = InsertTrain(node.Left, number, destination, departureTime);
