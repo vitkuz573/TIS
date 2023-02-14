@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Input;
 using System.Windows.Media;
 
 namespace WpfApp1;
@@ -120,21 +121,29 @@ public partial class MainWindow : Window
 
     private void AddTrainButton_Click(object sender, RoutedEventArgs e)
     {
-        var number = numberTextBox.Text;
-        var city = cityTextBox.Text;
+        _ = int.TryParse(numberTextBox.Text, out int number);
+
+        var destination = cityTextBox.Text;
         var departureDate = departureDatePicker.SelectedDate;
 
-        try
+        if (number == 0 || string.IsNullOrEmpty(destination) || departureDate == null || departureDate < DateTime.Now)
         {
-            _tis.InsertTrain(Convert.ToInt32(number), city, (DateTimeOffset)departureDate);
+            MessageBox.Show("Один или несколько параметров были заданы неверно!", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
         }
-        catch (ArgumentException)
+        else
         {
-            MessageBox.Show($"Поезд с номером {number} уже существует в системе!", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
-        }
-        finally
-        {
-            ReDrawTree();
+            try
+            {
+                _tis.InsertTrain(number, destination, (DateTimeOffset)departureDate);
+            }
+            catch (ArgumentException)
+            {
+                MessageBox.Show($"Поезд с номером {number} уже существует в системе!", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+            finally
+            {
+                ReDrawTree();
+            }
         }
     }
 
@@ -178,5 +187,24 @@ public partial class MainWindow : Window
         }
 
         MessageBox.Show(trainsInformation);
+    }
+
+    private void TextBox_PreviewTextInput(object sender, TextCompositionEventArgs e)
+    {
+        if (!char.IsDigit(e.Text, e.Text.Length - 1))
+        {
+            e.Handled = true;
+        }
+    }
+
+    private void TextBox_TextChanged(object sender, TextChangedEventArgs e)
+    {
+        if (sender is TextBox textBox)
+        {
+            if (!int.TryParse(textBox.Text, out _))
+            {
+                textBox.Text = string.Empty;
+            }
+        }
     }
 }
