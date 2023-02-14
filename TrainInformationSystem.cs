@@ -3,23 +3,13 @@ using System.Collections.Generic;
 
 namespace WpfApp1;
 
-class TrainInformationSystem
+internal class TrainInformationSystem
 {
     public Train? Root { get; private set; }
-    public int Count { get; private set; }
 
     public void InsertTrain(int number, string destination, DateTime departureTime)
     {
-        if (Root == null)
-        {
-            Root = new Train(number, destination, departureTime);
-            Count = 1;
-
-            return;
-        }
-
         Root = InsertTrain(Root, number, destination, departureTime);
-        Count++;
     }
 
     private Train InsertTrain(Train node, int number, string destination, DateTime departureTime)
@@ -159,17 +149,17 @@ class TrainInformationSystem
             return;
         }
 
-        if (node.Destination == destination)
+        if (string.Equals(node.Destination, destination, StringComparison.OrdinalIgnoreCase))
         {
             result.Add(node);
         }
 
-        if (node.Left != null && string.Compare(destination, node.Destination) < 0)
+        if (node.Left != null && string.Compare(destination, node.Destination, StringComparison.OrdinalIgnoreCase) < 0)
         {
             FindTrainsByDestination(node.Left, destination, result);
         }
 
-        if (node.Right != null && string.Compare(destination, node.Destination) > 0)
+        if (node.Right != null && string.Compare(destination, node.Destination, StringComparison.OrdinalIgnoreCase) > 0)
         {
             FindTrainsByDestination(node.Right, destination, result);
         }
