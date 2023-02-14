@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace WpfApp1;
+namespace TIS;
 
 internal class Train
 {

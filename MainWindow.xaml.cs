@@ -7,7 +7,7 @@ using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
 
-namespace WpfApp1;
+namespace TIS;
 
 public partial class MainWindow : Window
 {
@@ -19,7 +19,7 @@ public partial class MainWindow : Window
         InitializeComponent();
 
         _tis = new TrainInformationSystem();
-        
+
         InsertTrainInformation();
 
         ReDrawTree();
@@ -156,7 +156,7 @@ public partial class MainWindow : Window
         AddVisualToCanvas(_visual);
     }
 
-    private void SearchByIdentifierButton_Click(object sender, RoutedEventArgs e)
+    private void SearchByNumberButton_Click(object sender, RoutedEventArgs e)
     {
         var id = Convert.ToInt32(numberToFindTextBox.Text);
 
