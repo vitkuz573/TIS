@@ -106,47 +106,57 @@ public partial class MainWindow : Window
 
     private void SearchByNumberButton_Click(object sender, RoutedEventArgs e)
     {
-        var id = Convert.ToInt32(numberToFindTextBox.Text);
-
-        var trainInformation = $"Поезд с номером {numberToFindTextBox.Text} не найден!";
+        var messageBoxMessage = "Введите номер поезда!";
         var messageBoxCaption = "Ошибка";
         var messageBoxImage = MessageBoxImage.Error;
 
-        if (_tis.FindTrain(id, out var train))
+        if (numberToFindTextBox.Text != string.Empty)
         {
-            trainInformation = $"Номер: {train.Number}\r\nСтанция назначения: {train.Destination}\r\nВремя прибытия: {train.DepartureTime}";
-            messageBoxCaption = "Результат";
-            messageBoxImage = MessageBoxImage.Information;
-        }
+            var id = Convert.ToInt32(numberToFindTextBox.Text);
 
-        MessageBox.Show(trainInformation, messageBoxCaption, MessageBoxButton.OK, messageBoxImage);
-    }
+            messageBoxMessage = $"Поезд с номером {numberToFindTextBox.Text} не найден!";
 
-    private void SearchByDestinationButton_Click(object sender, RoutedEventArgs e)
-    {
-        var destination = destinationToFindTextBox.Text;
-
-        var trains = _tis.FindTrainsByDestination(destination);
-
-        var trainsInformation = string.Empty;
-        var messageBoxCaption = "Ошибка";
-        var messageBoxImage = MessageBoxImage.Error;
-
-        if (trains.Any())
-        {
-            foreach (var train in trains)
+            if (_tis.FindTrain(id, out var train))
             {
-                trainsInformation += $"Номер: {train.Number}\r\nСтанция назначения: {train.Destination}\r\nВремя прибытия: {train.DepartureTime}\r\n\r\n";
+                messageBoxMessage = $"Номер: {train.Number}\r\nСтанция назначения: {train.Destination}\r\nВремя прибытия: {train.DepartureTime}";
                 messageBoxCaption = "Результат";
                 messageBoxImage = MessageBoxImage.Information;
             }
         }
-        else
+
+        MessageBox.Show(messageBoxMessage, messageBoxCaption, MessageBoxButton.OK, messageBoxImage);
+    }
+
+    private void SearchByDestinationButton_Click(object sender, RoutedEventArgs e)
+    {
+        var messageBoxMessage = "Введите станцию назначения!";
+        var messageBoxCaption = "Ошибка";
+        var messageBoxImage = MessageBoxImage.Error;
+
+        if (destinationToFindTextBox.Text != string.Empty)
         {
-            trainsInformation = $"Поезда со станцией назначения '{destination}' не найдены!";
+            var destination = destinationToFindTextBox.Text;
+
+            var trains = _tis.FindTrainsByDestination(destination);
+
+            messageBoxMessage = string.Empty;
+
+            if (trains.Any())
+            {
+                foreach (var train in trains)
+                {
+                    messageBoxMessage += $"Номер: {train.Number}\r\nСтанция назначения: {train.Destination}\r\nВремя прибытия: {train.DepartureTime}\r\n\r\n";
+                    messageBoxCaption = "Результат";
+                    messageBoxImage = MessageBoxImage.Information;
+                }
+            }
+            else
+            {
+                messageBoxMessage = $"Поезда со станцией назначения '{destination}' не найдены!";
+            }
         }
 
-        MessageBox.Show(trainsInformation, messageBoxCaption, MessageBoxButton.OK, messageBoxImage);
+        MessageBox.Show(messageBoxMessage, messageBoxCaption, MessageBoxButton.OK, messageBoxImage);
     }
 
     private void TextBox_PreviewTextInput(object sender, TextCompositionEventArgs e)
